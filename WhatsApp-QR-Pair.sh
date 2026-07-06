@@ -6,6 +6,7 @@
 # ─────────────────────────────────────────────────────
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HERMES_HOME="${HOME}/.hermes"
 HERMES_AGENT="${HERMES_HOME}/hermes-agent"
 SESSION_DIR="${HERMES_HOME}/whatsapp/session"
@@ -44,8 +45,9 @@ node bridge.js --pair-only --session "$SESSION_DIR"
 
 echo ""
 if [ -f "${SESSION_DIR}/creds.json" ]; then
-  echo "✅ WhatsApp paired! Start gateway:"
-  echo "   cd ${HERMES_AGENT} && uv run hermes gateway run"
+  echo "✅ WhatsApp paired! Update session:"
+  echo "   cd ${SCRIPT_DIR} && bash deploy/backup-session.sh"
+  echo "   Then commit and push the new session.tar.gz"
 else
   echo "⚠ Pairing incomplete. Run again."
 fi

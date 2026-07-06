@@ -4,8 +4,10 @@
 # ─────────────────────────────────────────────────────
 set -e
 
-HERMES_AGENT="${HOME}/.hermes/hermes-agent"
-WORKSPACE="/media/zorin/DATA1/Projects/Sofan"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+HERMES_HOME="${HOME}/.hermes"
+HERMES_AGENT="${HERMES_HOME}/hermes-agent"
+WORKSPACE="${SCRIPT_DIR}"
 
 echo "┌──────────────────────────────────────────────┐"
 echo "│      Sofan AI Assistant - Hermes Agent       │"
@@ -33,7 +35,7 @@ case "$CMD" in
     ;;
   dashboard)
     echo "Starting Hermes Web Dashboard at http://127.0.0.1:9119"
-    cd "$HERMES_AGENT" && uv run hermes dashboard --port 9119 --host 127.0.0.1
+    cd "$HERMES_AGENT" && uv run hermes dashboard --port 9119 --host 0.0.0.0
     ;;
   gateway)
     echo "Starting Hermes Gateway (WhatsApp auto-responder)..."
@@ -43,9 +45,9 @@ case "$CMD" in
   all)
     echo "Starting Hermes Dashboard + Gateway together..."
     cd "$HERMES_AGENT"
-    uv run hermes dashboard --port 9119 --host 127.0.0.1 --no-open &
+    uv run hermes dashboard --port 9119 --host 0.0.0.0 --no-open &
     DASH_PID=$!
-    echo "  Dashboard PID: $DASH_PID (http://127.0.0.1:9119)"
+    echo "  Dashboard PID: $DASH_PID (http://0.0.0.0:9119)"
     echo "  Starting gateway..."
     uv run hermes gateway run
     ;;
@@ -54,7 +56,7 @@ case "$CMD" in
     cd "$HERMES_AGENT" && uv run hermes whatsapp
     ;;
   qr-pair)
-    cd "$WORKSPACE" && ./WhatsApp-QR-Pair.sh
+    cd "$WORKSPACE" && bash WhatsApp-QR-Pair.sh
     ;;
   model)
     cd "$HERMES_AGENT" && uv run hermes model
@@ -66,11 +68,14 @@ case "$CMD" in
     echo "Installing/Managing systemd services..."
     case "${2:-status}" in
       install)
+        mkdir -p "${HOME}/.config/systemd/user"
+        cp "$WORKSPACE"/systemd/*.service "${HOME}/.config/systemd/user/"
         systemctl --user daemon-reload
-        systemctl --user enable hermes-dashboard
-        systemctl --user start hermes-dashboard
-        echo "✅ Dashboard service installed (auto-starts on boot)"
-        echo "   http://127.0.0.1:9119"
+        systemctl --user enable hermes-dashboard hermes-gateway hermes-webhook 2>/dev/null
+        systemctl --user start hermes-dashboard hermes-gateway hermes-webhook 2>/dev/null
+        echo "✅ All services installed (auto-start on boot)"
+        echo "   Dashboard: http://<your-ip>:9119"
+        echo "   Webhook:   http://<your-ip>:9120"
         ;;
       status)
         echo "=== Dashboard ==="
@@ -78,14 +83,17 @@ case "$CMD" in
         echo ""
         echo "=== Gateway ==="
         systemctl --user status hermes-gateway 2>&1 | head -10
+        echo ""
+        echo "=== Webhook ==="
+        systemctl --user status hermes-webhook 2>&1 | head -10
         ;;
       stop)
-        systemctl --user stop hermes-dashboard hermes-gateway 2>/dev/null
+        systemctl --user stop hermes-dashboard hermes-gateway hermes-webhook 2>/dev/null
         echo "Services stopped"
         ;;
       restart)
-        systemctl --user restart hermes-dashboard 2>/dev/null
-        echo "Dashboard restarted"
+        systemctl --user restart hermes-dashboard hermes-webhook 2>/dev/null
+        echo "Services restarted"
         ;;
       logs)
         journalctl --user -u hermes-dashboard -n 50 --no-pager

@@ -11,8 +11,8 @@ import asyncio
 import subprocess
 from datetime import datetime
 
-HERMES_AGENT = os.path.expanduser("~/.hermes/hermes-agent")
 HERMES_HOME = os.path.expanduser("~/.hermes")
+HERMES_AGENT = os.path.join(HERMES_HOME, "hermes-agent")
 
 try:
     from aiohttp import web
@@ -28,6 +28,7 @@ def log_message(direction, data):
         "direction": direction,
         "data": data
     }
+    os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
     with open(LOG_FILE, "a") as f:
         f.write(json.dumps(entry) + "\n")
 
@@ -41,7 +42,6 @@ async def handle_contact_form(request):
 
     log_message("inbound", data)
 
-    # Send notification to admin
     name = data.get("name", data.get("fullName", "Unknown"))
     email = data.get("email", "N/A")
     phone = data.get("phone", data.get("phoneNumber", "N/A"))
@@ -77,7 +77,6 @@ async def handle_chat_message(request):
     log_message("chat_inbound", data)
     message = data.get("message", "")
 
-    # Forward to Hermes via subprocess (oneshot)
     try:
         result = subprocess.run(
             ["uv", "run", "hermes", "chat", "-q", message,

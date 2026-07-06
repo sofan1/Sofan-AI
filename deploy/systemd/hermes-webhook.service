@@ -1,0 +1,15 @@
+[Unit]
+Description=Sofan Business Webhook API Server (Website Integration)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/.hermes/hermes-agent
+ExecStart=%h/.local/bin/uv run --directory %h/.hermes/hermes-agent python /media/zorin/DATA1/Projects/Sofan/webhook-server.py
+Restart=on-failure
+RestartSec=5
+Environment=WEBHOOK_PORT=9120
+Environment=HERMES_HOME=%h/.hermes
+
+[Install]
+WantedBy=default.target

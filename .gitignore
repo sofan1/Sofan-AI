@@ -1,11 +1,3 @@
-# Secrets & config
-.env
-.hermes/
-*creds.json
-webhook-messages.jsonl
-public and private
-public and private.pub
-
 # Python
 __pycache__/
 *.pyc
@@ -25,12 +17,12 @@ Thumbs.db
 
 # Logs
 *.log
+webhook-messages.jsonl
 
 # Large assets & data exports
 instgram/
 .cluster/
 workspace-*.tar
-config/
 Business Images/
 Logo/
 .opencode/
@@ -45,3 +37,11 @@ SOUL.md
 TOOLS.md
 USER.md
 AGENTS.md
+
+# SSH keys & sensitive
+public and private
+public and private.pub
+*.zip
+*.tar
+config/
+.hermes/
