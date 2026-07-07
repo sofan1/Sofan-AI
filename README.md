@@ -78,7 +78,7 @@ app/api/proxy/[...path]/route.js Catch-all → Hermes or Webhook (path-based)
 app/api/status/route.js          Combined health endpoint
 app/api/_shared.js               Upstream target constants
 lib/spawn-services.js            Lazy auto-spawn for Hermes + webhook
-proxy.ts                         Middleware: rewrites paths to /api/proxy/*
+proxy.ts                         Next.js 16 Proxy: rewrites paths to /api/proxy/*
 scripts/start_all.sh             One-shot launcher for all 3 services
 sofan-ai-fresh/                  Cloned github.com/sofan1/Sofan-AI (launchers + webhook)
 ```
