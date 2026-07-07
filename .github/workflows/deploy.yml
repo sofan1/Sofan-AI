@@ -19,10 +19,40 @@ jobs:
       - run: npx next build
       - name: Verify production build
         run: ls -la .next/BUILD_ID && echo "Build OK"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: next-build
+          path: |
+            .next
+            public
+            package.json
+            next.config.js
+            proxy.ts
 
-  deploy:
+  deploy-vps:
     needs: build
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
+    environment: production
     steps:
-      - run: echo "Deploy to https://sofan-ai.space-z.ai/ ready for platform integration"
+      - uses: actions/download-artifact@v4
+        with:
+          name: next-build
+      - name: Deploy to VPS
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+        run: |
+          echo "Deploying to https://sofan-ai.space-z.ai/"
+          echo ""
+          echo "To deploy manually:"
+          echo "  1. SSH into your server: ssh user@your-server-ip"
+          echo "  2. cd ~ && git clone https://github.com/sofan1/Sofan-AI.git"
+          echo "  3. cd Sofan-AI && bash deploy/remote-setup.sh"
+          echo "  4. sudo cp deploy/nginx.conf /etc/nginx/sites-available/sofan-ai"
+          echo "  5. sudo ln -sf /etc/nginx/sites-available/sofan-ai /etc/nginx/sites-enabled/"
+          echo "  6. sudo certbot certonly --standalone -d sofan-ai.space-z.ai"
+          echo "  7. ./Hermes-Start.sh service install"
+          echo ""
+          echo "Your app will be live at: https://sofan-ai.space-z.ai/"
