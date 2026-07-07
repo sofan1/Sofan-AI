@@ -15,7 +15,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-      - run: npm ci
+      - run: npm install
       - run: npm run build
       - name: Verify production build
         run: ls -la .next/BUILD_ID && echo "Build OK"
