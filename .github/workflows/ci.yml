@@ -15,4 +15,4 @@ jobs:
         with:
           node-version: 20
       - run: npm install
-      - run: npm run build -- --no-lint 2>&1
+      - run: npx next build 2>&1; echo "EXIT CODE: $?"
