@@ -12,33 +12,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: npm
+          node-version: 18
       - run: npm ci
       - run: npm run build
       - name: Verify production build
         run: ls -la .next/BUILD_ID && echo "Build OK"
-      - uses: actions/upload-artifact@v4
-        with:
-          name: next-build
-          path: |
-            .next
-            public
-            package.json
-            next.config.js
-            proxy.ts
 
   deploy:
     needs: build
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: next-build
-      - name: Deploy to server
-        run: |
-          echo "Deploying to https://sofan-ai.space-z.ai/"
-          echo "Trigger platform deployment from GitHub tag v3.0.0"
+      - run: echo "Deploy to https://sofan-ai.space-z.ai/ ready for platform integration"
