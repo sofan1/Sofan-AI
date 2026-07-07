@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+.next/
+out/
+bun.lock
+package-lock.json
+
+# Skills (system)
+skills/
+
+# Environment & secrets (NEVER commit)
+.env
+.env.local
+.env.backup
+.env.*.local
+sofan-ai-fresh/deploy/.env
+sofan-ai-fresh/deploy/session.tar.gz
+sofan-ai-fresh/deploy/.env.*
+
+# Logs
+*.log
+*.pid
+scripts/*.log
+scripts/*.pid
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Upload originals
+upload/
+
+# Old zip extracts (keep sofan-ai-fresh only)
+sofan-ai/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+dist/
+build/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+db/

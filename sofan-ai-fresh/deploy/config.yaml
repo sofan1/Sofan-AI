@@ -1,0 +1,72 @@
+model:
+  default: gemini/gemini-2.5-flash
+  provider: gemini
+  base_url: ''
+agent:
+  max_turns: 60
+  coding_instructions:
+    - Detect the customer's message language and ALWAYS reply in the same language
+      they wrote in (Arabic, English, or mix).
+    - You are Sofan Business AI Assistant for MN SOFAN - Premium Tech Development
+      & Digital Marketing services in UAE.
+    - 'Services: Website Development, Custom Web Apps, SEO Campaigns, Digital Marketing,
+      Mobile-First Design, Analytics.'
+    - 'Location: Dubai, UAE (serving all 7 emirates).'
+    - 'Contact: +971 55 207 9989 | Email: mnsofan1@gmail.com'
+    - Be professional, helpful, and warm. Represent the brand positively.
+  reasoning_effort: medium
+terminal:
+  backend: local
+  cwd: ~/Sofan-AI
+  timeout: 180
+dashboard:
+  theme: mono
+memory:
+  memory_enabled: true
+  user_profile_enabled: true
+  memory_char_limit: 4400
+  user_char_limit: 2750
+skills:
+  creation_nudge_interval: 15
+  disabled: []
+cron:
+  home_channel:
+    platform: whatsapp
+    chat_id: 132559921004556@lid
+    suppress_customer_notifications: true
+gateway:
+  enabled: true
+  max_concurrent_sessions: 10
+  reconnect_interval: 5
+streaming:
+  enabled: true
+  edit_interval: 0.3
+  buffer_threshold: 40
+_config_version: 33
+platforms:
+  whatsapp:
+    enabled: true
+    reply_prefix: '🤖 *Sofan AI*
+
+      '
+    allowed_users: '*'
+    home_channel:
+      platform: whatsapp
+      chat_id: 132559921004556@lid
+      name: Mohamed Nashaat
+  webhook:
+    enabled: true
+    port: 9120
+    host: 0.0.0.0
+    api_key: ${WEBHOOK_API_KEY}
+platform_toolsets:
+  cli:
+    - hermes-cli
+  whatsapp:
+    - hermes-whatsapp
+mcp_servers: {}
+session_reset:
+  mode: both
+  idle_minutes: 4320
+  at_hour: 4
+group_sessions_per_user: true

@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Node
+node_modules/
+package-lock.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+webhook-messages.jsonl
+
+# Large assets & data exports
+instgram/
+.cluster/
+workspace-*.tar
+Business Images/
+Logo/
+.opencode/
+
+# Personal docs (not for public repo)
+IDENTITY.md
+
+# Agent personal files
+HEARTBEAT.md
+MEMORY.md
+SOUL.md
+TOOLS.md
+USER.md
+AGENTS.md
+
+# SSH keys & sensitive
+public and private
+public and private.pub
+*.zip
+*.tar
+config/
+.hermes/

@@ -1,0 +1,14 @@
+[Unit]
+Description=Hermes Agent Dashboard (Web UI)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/.hermes/hermes-agent
+ExecStart=%h/.local/bin/uv run --directory %h/.hermes/hermes-agent python -m hermes_cli.main dashboard --port 9119 --host 0.0.0.0 --no-open
+Restart=on-failure
+RestartSec=5
+Environment=HERMES_HOME=%h/.hermes
+
+[Install]
+WantedBy=default.target
